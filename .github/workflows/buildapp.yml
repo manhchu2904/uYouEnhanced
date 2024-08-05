@@ -189,3 +189,31 @@ jobs:
           name: v${{ env.YOUTUBE_VERSION }}-${{ env.UYOU_VERSION }}-(${{ github.run_number }})
           files: main/packages/*.ipa
           draft: true
+
+      - name: Job Summary
+        run: |
+          echo -e '### 📺 Hoàn tất Xây dựng' >> $GITHUB_STEP_SUMMARY
+      
+      - name: Job Summary - Artifact Upload
+        if: ${{ inputs.upload_artifact }}
+        run: |
+          echo -e '### 📦 Tải lên Artifact\n\nArtifact đã được tải lên thành công! Làm mới và [cuộn xuống](#artifacts) để xem artifact. Lưu ý rằng bạn phải đăng nhập vào GitHub để tải xuống nó.' >> $GITHUB_STEP_SUMMARY
+      
+      - name: Job Summary - Catbox Upload
+        if: ${{ inputs.catbox_upload }}
+        run: |
+          echo -e '### 🐱 Tải lên Catbox\n\nTải lên Catbox đã thành công! Đây là liên kết chia sẻ vĩnh viễn: '$CATBOX_URL >> $GITHUB_STEP_SUMMARY
+      
+      - name: Job Summary - Draft Release
+        if: ${{ inputs.create_release }}
+        run: |
+          REPO_URL="https://github.com/${{ github.repository }}"
+          RELEASES_URL="$REPO_URL/releases"
+          echo -e '### 🚀 Phiên bản Draft\n\nPhiên bản draft đã được tạo thành công! Bạn có thể xem các phiên bản của bạn tại đây: '$RELEASES_URL >> $GITHUB_STEP_SUMMARY
+      
+      - name: Job Summary - Link to remove GitHub Action runs
+        run: |
+          REPO_URL="https://github.com/${{ github.repository }}"
+          DELETE_RUNS_URL="$REPO_URL/actions/workflows/delete-workflow-runs.yml"
+          echo -e '### 🧹 Dọn dẹp\n\nBạn có thể xóa các lần chạy GitHub Action trước đây tại đây: '$DELETE_RUNS_URL >> $GITHUB_STEP_SUMMARY
+
